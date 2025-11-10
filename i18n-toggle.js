@@ -138,7 +138,7 @@
     const isDesktop = window.matchMedia("(min-width: 72rem)").matches;
 
     // petite marge de sécurité pour ne pas être "à ras"
-    const BOTTOM_SAFE = 12; // px
+    const BOTTOM_SAFE = 6; // px
 
     requestAnimationFrame(() => {
       if (!isDesktop) return;
