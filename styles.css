@@ -31,7 +31,7 @@ body {
   margin: 0;
   width: 100%;
   height: auto;
-  overflow-x: hidden; /* coupe tout débordement horizontal résiduel */
+  overflow-x: hidden;
 }
 
 body {
@@ -89,8 +89,6 @@ body {
   width: 100%;
   max-width: var(--max-prose);
   margin-inline: auto;
-
-  /* dimensions par défaut (mobile / tablette) */
   min-height: auto;
   height: auto;
   max-height: none;
@@ -104,8 +102,6 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   gap: 0.5rem;
-
-  transform: none;
 
   background: var(--glass);
   border: 1px solid var(--glass-border);
@@ -207,27 +203,8 @@ a.button:hover {
   height: 22px;
   border-radius: 3px;
 }
-.lang-toggle {
-  -webkit-tap-highlight-color: transparent;
-  overflow: hidden;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  transform: translateZ(0);
-  will-change: transform, opacity;
-  contain: paint;
-}
-.lang-toggle:focus {
-  outline: none;
-}
-@supports (-webkit-touch-callout: none) {
-  .lang-toggle {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-  }
-}
 
-/* ====== Orientation hints ====== */
+/* ========= Orientation hints ========= */
 @media (orientation: portrait) {
   body {
     background-position: 50% 60%;
@@ -257,7 +234,6 @@ a.button:hover {
 
 /* ========= PALIER 2 — Desktop ≥ 1152px ========= */
 @media (min-width: 1152px) {
-  /* Page = viewport, zéro scroll vertical */
   html,
   body {
     height: 100vh;
@@ -290,102 +266,42 @@ a.button:hover {
   }
 
   .letter {
-    /* largeur & position */
     max-width: min(720px, calc(100vw - 2 * var(--safe-gap)));
     width: clamp(320px, 42vw, 720px);
     margin-left: auto;
     margin-right: 2%;
-
-    /* hauteur : tient dans l’écran sans scroll interne */
-    min-height: auto;
     max-height: calc(100vh - 2 * var(--safe-gap));
     overflow: clip;
-
-    /* inclinaison */
     transform: perspective(1600px) rotateY(-10deg) rotateX(2deg)
       translateZ(32px);
     transform-origin: center right;
     transform-style: preserve-3d;
-    backface-visibility: hidden;
-    will-change: transform;
-
     box-shadow: -14px 18px 36px var(--shadow),
       0 1px 0 rgba(255, 255, 255, 0.55) inset;
-
-    /* base de scale pour que p, intro, bouton suivent */
-    --prose-scale: 1;
+    --prose-scale: 0.95; /* 🔹 Taille réduite pour toutes les langues */
   }
 
-  /* Typo qui suit le scale (normal ou fit-tight) */
   .letter p {
     font-size: calc(clamp(1rem, 1.2vw + 0.6rem, 1.2rem) * var(--prose-scale));
-    line-height: calc(1.66 * var(--prose-scale));
+    line-height: calc(1.58 * var(--prose-scale));
   }
+
   .letter .intro {
-    font-size: calc(1.1em * var(--prose-scale));
+    font-size: calc(1.06em * var(--prose-scale));
   }
+
   .letter a.button {
     padding: calc(0.9rem * var(--prose-scale)) calc(1.2rem * var(--prose-scale));
     margin-top: calc(0.6rem * var(--prose-scale));
   }
 
-  /* ---- Si le contenu déborde : on serre très légèrement ---- */
-  .letter.fit-tight {
-    --prose-scale: 0.92; /* pour faire rentrer bouton + signature */
-
-    padding-block-start: clamp(0.75rem, 1.5vmin, 1.3rem);
-    padding-block-end: clamp(0.75rem, 1.5vmin, 1.3rem);
-    padding-inline: clamp(0.75rem, 1.8vmin, 1.4rem);
-    gap: 0.32rem;
-  }
-
-  .letter.fit-tight p {
-    font-size: calc(clamp(1rem, 1.2vw + 0.6rem, 1.2rem) * var(--prose-scale));
-    line-height: calc(1.58 * var(--prose-scale));
-    margin-bottom: 0.55rem;
-  }
-
-  .letter.fit-tight .intro {
-    font-size: calc(1.04em * var(--prose-scale));
-  }
-
   .letter .signature {
     margin-top: 0.35rem;
-    font-size: calc(0.96em * var(--prose-scale));
+    font-size: calc(0.98em * var(--prose-scale));
   }
 
-  /* évite qu’un dernier élément garde une marge qui clippe */
-  .letter > *:last-child {
-    margin-bottom: 0;
-  }
-}
-
-/* ====== Interactions tactiles ====== */
-@media (hover: none) and (pointer: coarse) {
-  a.button:hover {
-    transform: none;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
-  }
-  .lang-toggle:hover {
-    transform: none;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
-  }
-}
-
-/* ---- Harmonisation typographique desktop (FR + EN) ---- */
-@media (min-width: 1152px) {
-  /* Ajustement global léger pour uniformiser les deux langues */
-  .letter {
-    --prose-scale: 0.97; /* -3 % pour tout le monde */
-  }
-
-  /* Le français est un peu plus long : micro-ajustement supplémentaire */
-  html[lang="fr"] .letter {
-    --prose-scale: 0.96; /* -4 % au total → harmonieux et sans rognage */
-  }
-
-  /* On réduit très légèrement le line-height pour équilibrer la hauteur */
-  .letter p {
-    line-height: calc(1.58 * var(--prose-scale));
+  /* Si le texte déborde, "fit-tight" resserre encore un peu */
+  .letter.fit-tight {
+    --prose-scale: 0.93;
   }
 }
