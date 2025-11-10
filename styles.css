@@ -371,3 +371,21 @@ a.button:hover {
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
   }
 }
+
+/* ---- Harmonisation typographique desktop (FR + EN) ---- */
+@media (min-width: 1152px) {
+  /* Ajustement global léger pour uniformiser les deux langues */
+  .letter {
+    --prose-scale: 0.97; /* -3 % pour tout le monde */
+  }
+
+  /* Le français est un peu plus long : micro-ajustement supplémentaire */
+  html[lang="fr"] .letter {
+    --prose-scale: 0.96; /* -4 % au total → harmonieux et sans rognage */
+  }
+
+  /* On réduit très légèrement le line-height pour équilibrer la hauteur */
+  .letter p {
+    line-height: calc(1.58 * var(--prose-scale));
+  }
+}
