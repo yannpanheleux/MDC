@@ -305,3 +305,15 @@ a.button:hover {
     --prose-scale: 0.93;
   }
 }
+
+/* marge de fin toujours nulle dans la carte */
+.letter > *:last-child {
+  margin-bottom: 0;
+}
+
+/* le bouton n'ajoute pas de marge basse inutile */
+@media (min-width: 1152px) {
+  .letter a.button {
+    margin-bottom: 0;
+  }
+}

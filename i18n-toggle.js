@@ -34,7 +34,7 @@
         dont la gestion sera confiée à l’association
         <span class="highlight">MOANA ORA, Ocean Research Alliance</span>.<br />
         Hina et Kuokoa, nos deux grands dauphins, continueront d’être accompagnés
-        avec la même attention et la même bienveillance, dans un cadre où respect,
+        avec la même bienveillance, dans un cadre où respect,
         sécurité et bien-être resteront les valeurs fondatrices de Moana Ora.`,
       p2: `Nous remercions chaleureusement toutes celles et ceux qui, depuis plus de 30 ans,
         ont participé à nos programmes interactifs et éducatifs, contribuant à cette
@@ -137,31 +137,38 @@
     // même seuil que le CSS (72rem ≈ 1152px)
     const isDesktop = window.matchMedia("(min-width: 72rem)").matches;
 
-    // attendre le rendu (textes/mesures stables)
+    // petite marge de sécurité pour ne pas être "à ras"
+    const BOTTOM_SAFE = 8; // px
+
     requestAnimationFrame(() => {
       if (!isDesktop) return;
 
-      // Si ça déborde, on active fit-tight + scale adaptatif
-      const fits = letter.scrollHeight <= letter.clientHeight;
-      if (fits) return;
+      // si ça rentre déjà avec l'échelle globale (CSS), on ne touche à rien
+      if (letter.scrollHeight <= letter.clientHeight - BOTTOM_SAFE) return;
 
+      // active le mode compact et ajuste finement l'échelle
       letter.classList.add("fit-tight");
 
-      // scale de départ (comme dans le CSS), puis on descend au besoin
-      let scale = 0.93;
-      letter.style.setProperty("--prose-scale", String(scale));
+      // point de départ = valeur CSS actuelle (fallback 0.93 si absent)
+      const cssScale =
+        parseFloat(
+          getComputedStyle(letter).getPropertyValue("--prose-scale")
+        ) || 0.93;
 
-      // Tant que ça déborde encore, on réduit par pas de 0.01 jusqu'à 0.90
-      // (quelques itérations max; chaque lecture force un reflow suffisant ici)
-      let guard = 0;
+      let scale = cssScale;
+      let tries = 0;
+
+      letter.style.setProperty("--prose-scale", scale.toFixed(2));
+
+      // rétrécit par pas très fins jusqu'à ce que TOUT tienne avec marge
       while (
-        letter.scrollHeight > letter.clientHeight &&
+        letter.scrollHeight > letter.clientHeight - BOTTOM_SAFE &&
         scale > 0.9 &&
-        guard < 5
+        tries < 20
       ) {
         scale -= 0.01;
         letter.style.setProperty("--prose-scale", scale.toFixed(2));
-        guard++;
+        tries++;
       }
     });
   }
