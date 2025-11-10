@@ -317,3 +317,43 @@ a.button:hover {
     margin-bottom: 0;
   }
 }
+
+/* ===== OVERRIDES FINAUX — Desktop : tout rentre sans rognage ===== */
+@media (min-width: 1152px) {
+  /* 1) Police un peu plus petite pour TOUTES les langues en desktop */
+  .letter {
+    --prose-scale: 0.92; /* ~ -8% sur la taille de texte */
+    max-height: calc(100vh - 2 * var(--safe-gap));
+    overflow: clip;
+  }
+
+  /* 2) Rythme vertical un peu plus compact */
+  .letter p {
+    font-size: calc(clamp(1rem, 1.2vw + 0.6rem, 1.2rem) * var(--prose-scale));
+    line-height: calc(1.56 * var(--prose-scale));
+    margin-bottom: 0.6rem;
+  }
+  .letter .intro {
+    font-size: calc(1.04em * var(--prose-scale));
+  }
+  .letter .signature {
+    font-size: calc(0.96em * var(--prose-scale));
+    margin-top: 0.35rem;
+  }
+  .letter a.button {
+    padding: calc(0.9rem * var(--prose-scale)) calc(1.2rem * var(--prose-scale));
+    margin-top: 0.55rem;
+    margin-bottom: 1rem; 
+    align-self: flex-start;
+  }
+
+  /* 3) Pas de marge basse résiduelle sur le dernier enfant */
+  .letter > *:last-child {
+    margin-bottom: 0;
+  }
+
+  /* 4) Filet de sécurité si un écran est très “court” */
+  .letter.fit-tight {
+    --prose-scale: 0.9;
+  }
+}
