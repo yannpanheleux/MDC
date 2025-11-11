@@ -1,3 +1,4 @@
+/* === Cohérence typographique entre machines === */
 html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
@@ -173,7 +174,7 @@ a.button:hover {
   color: var(--ink);
 }
 
-/* ====== Bouton de langue (haut droite sur tous écrans) ====== */
+/* ====== Bouton de langue ====== */
 .lang-toggle {
   position: absolute;
   top: 0.8rem;
@@ -206,7 +207,7 @@ a.button:hover {
   border-radius: 3px;
 }
 
-/* ===== PATCH iOS: empêcher l’apparition furtive du carré au tap ===== */
+/* ===== PATCH iOS ===== */
 .lang-toggle {
   -webkit-tap-highlight-color: transparent;
   overflow: hidden;
@@ -239,7 +240,7 @@ a.button:hover {
   }
 }
 
-/* ========= PALIER 1 — ≥ 48rem (~768px) ========= */
+/* ========= PALIER 1 — ≥ 48rem ========= */
 @media (min-width: 48rem) {
   .container {
     display: grid;
@@ -249,15 +250,13 @@ a.button:hover {
   .letter {
     grid-column: 2;
   }
-
   a.button {
     align-self: flex-start;
     width: auto;
   }
 }
 
-/* ========= PALIER 2 — ≥ 72rem (~1152px) ========= */
-/* Desktop : effet incliné + fond fixe + logo repositionné */
+/* ========= PALIER 2 — ≥ 72rem ========= */
 @media (min-width: 72rem) {
   body {
     overflow: hidden;
@@ -301,13 +300,12 @@ a.button:hover {
   }
 
   .lang-toggle {
-    position: absolute;
     top: 0.8rem;
     right: 0.8rem;
   }
 }
 
-/* ====== Interactions tactiles ====== */
+/* Interactions tactiles */
 @media (hover: none) and (pointer: coarse) {
   a.button:hover {
     transform: none;
@@ -319,36 +317,14 @@ a.button:hover {
   }
 }
 
-/* === PATCH: forcer l'effet incliné sur desktop uniquement === */
+/* === PATCHs d’inclinaison desktop === */
 @media (min-width: 72rem) {
-  /* S’assure que la perspective est bien active au niveau du parent */
   body {
     perspective: 1600px !important;
     perspective-origin: right center;
     transform-style: preserve-3d;
   }
-
-  /* Force la rotation et sa priorité en desktop */
   .letter {
-    transform: rotateY(-10deg) rotateX(2deg) translateZ(32px) !important;
-    transform-origin: center right !important;
-    transform-style: preserve-3d;
-    will-change: transform;
-  }
-}
-
-/* Filet de sécurité si ta fenêtre est juste en-dessous de 72rem */
-@media (min-width: 1024px) and (max-width: 71.999rem) {
-  .letter {
-    transform: rotateY(-10deg) rotateX(2deg) translateZ(32px) !important;
-    transform-origin: center right !important;
-  }
-}
-
-/* === PATCH rotation desktop uniquement (indépendant du parent) === */
-@media (min-width: 72rem) {
-  .letter {
-    /* on applique la perspective directement dans le transform */
     transform: perspective(1600px) rotateY(-10deg) rotateX(2deg)
       translateZ(32px) !important;
     transform-origin: center right;
@@ -356,114 +332,52 @@ a.button:hover {
     will-change: transform;
   }
 }
-
-/* === PATCH iPad Air landscape & écrans desktop "peu hauts" === */
-@media (min-width: 72rem) and (max-height: 900px) {
+@media (min-width: 1024px) and (max-width: 71.999rem) {
   .letter {
-    max-height: calc(100dvh - 2 * var(--safe-gap));
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-gutter: stable;
-    padding-bottom: clamp(1rem, 2.5vmin, 2rem); /* un peu d'air pour le CTA */
-  }
-
-  /* Le bouton reste visible même si on scrolle dans la carte */
-  .letter a.button {
-    position: sticky;
-    bottom: 0.75rem;
-    align-self: stretch;
-    z-index: 2;
-  }
-
-  /* (Optionnel) adoucit l'affichage de la barre de scroll */
-  .letter::-webkit-scrollbar {
-    width: 10px;
-  }
-  .letter::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.25);
-    border-radius: 8px;
-  }
-  .letter::-webkit-scrollbar-track {
-    background: transparent;
-  }
-}
-
-/* === PATCH: CTA non-sticky, suit le défilement et reste en bas du contenu === */
-@media (min-width: 72rem) and (max-height: 900px) {
-  .letter {
-    max-height: calc(100dvh - 2 * var(--safe-gap));
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-gutter: stable;
-    padding-bottom: clamp(1.2rem, 2.5vmin, 2rem); /* espace final confortable */
-  }
-
-  /* Le bouton redevient dans le flux normal (pas sticky) */
-  .letter a.button {
-    position: static !important;
-    bottom: auto !important;
-    align-self: flex-start;
-    width: auto;
-    display: inline-block;
-    margin-top: 1rem; /* un peu d’air au-dessus du bouton */
-    z-index: 1;
-  }
-}
-
-/* === PATCH FINAL : forcer l’inclinaison en desktop, même avec overflow === */
-
-/* Desktop générique (≥ 72rem) */
-@media (min-width: 72rem) {
-  .container .letter {
-    transform: perspective(1600px) rotateY(-10deg) rotateX(2deg)
-      translateZ(32px) !important;
-    transform-origin: center right !important;
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
-    will-change: transform;
-  }
-}
-
-/* Desktop peu haut (iPad Air paysage, etc.) */
-@media (min-width: 72rem) and (max-height: 900px) {
-  .container .letter {
-    transform: perspective(1600px) rotateY(-10deg) rotateX(2deg)
-      translateZ(32px) !important;
+    transform: rotateY(-10deg) rotateX(2deg) translateZ(32px) !important;
     transform-origin: center right !important;
   }
 }
 
-/* === Ajustement auto si le texte est plus long (ex: FR) === */
+/* === Ajustement auto si le texte est plus long === */
 .letter {
   --prose-scale: 1;
 }
-
 @media (min-width: 72rem) {
-  /* Quand le script détecte que ça déborde, on "tighten" un peu */
-  .letter.fit-tight {
-    --prose-scale: 0.99; /* -1% typographie */
-    padding-block-start: clamp(1rem, 2vmin + 0.4rem, 2rem);
-    padding-block-end: clamp(1rem, 2vmin + 0.4rem, 2rem);
-    padding-inline: clamp(0.9rem, 2.2vmin + 0.5rem, 1.8rem);
-  }
-
   .letter p {
     font-size: calc(clamp(1rem, 1.2vw + 0.6rem, 1.2rem) * var(--prose-scale));
     line-height: calc(1.66 * var(--prose-scale));
   }
-
   .letter .intro {
     font-size: calc(1.1em * var(--prose-scale));
   }
-
   .letter a.button {
     padding: calc(0.9rem * var(--prose-scale)) calc(1.2rem * var(--prose-scale));
   }
 }
 
-html,
-body {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
+/* === FIX FINAL — desktop : aucun débordement de .letter === */
+@media (min-width: 72rem) {
+  html,
+  body {
+    height: 100dvh;
+  }
+  body {
+    overflow: hidden;
+  }
+
+  .letter {
+    max-height: calc(100dvh - 2 * var(--safe-gap));
+    overflow-y: auto; /* scroll interne si besoin */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+    padding-bottom: clamp(1rem, 2.5vmin, 2rem);
+  }
+
+  /* Effet 3D assuré même avec overflow interne */
+  .container .letter {
+    transform: perspective(1600px) rotateY(-10deg) rotateX(2deg)
+      translateZ(32px) !important;
+    transform-origin: center right !important;
+  }
 }

@@ -60,7 +60,7 @@
       p2: `We warmly thank all of those who, for over 30 years, took part in our interactive and
         educational programs, contributing to this wonderful human–animal adventure.
         This new step marks the beginning of a new chapter in the relationship between humans and the marine world.`,
-      p3: `Moana Ora look forward to welcoming you in <span class="highlight">March 2026</span>.<br/> You will discover a place of connection, education, and exploration of the marine world, where history, nature, science, and culture will blend harmoniously.`,
+      p3: `Moana Ora looks forward to welcoming you in <span class="highlight">March 2026</span>.<br/> You will discover a place of connection, education, and exploration of the marine world, where history, nature, science, and culture will blend harmoniously.`,
       signature: `The Moorea Dolphin Center team`,
       cta: `Discover Moana Ora`,
       aria: `Version française`,
@@ -125,17 +125,21 @@
   // --- Ajuste la carte pour garder les mêmes proportions (desktop) ---
   function fitLetter() {
     if (!letter) return;
-
-    // on enlève d'abord tout resserrement
-    letter.classList.remove("fit-tight");
-
-    // on n'ajuste que sur desktop (même palier que l'inclinaison)
     const isDesktop = window.matchMedia("(min-width: 72rem)").matches;
 
-    // attendre que le DOM applique les nouvelles traductions
+    // Réinitialise l'échelle au max
+    letter.style.setProperty("--prose-scale", "1");
+
+    if (!isDesktop) return;
+
+    // Laisse le DOM finir les mises à jour
     requestAnimationFrame(() => {
-      if (isDesktop && letter.scrollHeight > letter.clientHeight) {
-        letter.classList.add("fit-tight"); // resserre légèrement
+      // Réduit par pas de 1% jusqu’à ce que ça tienne (seuil 0.92)
+      let scale = 1.0;
+      const min = 0.92;
+      while (scale > min && letter.scrollHeight > letter.clientHeight) {
+        scale -= 0.01;
+        letter.style.setProperty("--prose-scale", scale.toFixed(2));
       }
     });
   }
