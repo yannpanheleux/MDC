@@ -34,7 +34,7 @@
         dont la gestion sera confiée à l’association
         <span class="highlight">MOANA ORA, Ocean Research Alliance</span>.<br />
         Hina et Kuokoa, nos deux grands dauphins, continueront d’être accompagnés
-        avec la même bienveillance, dans un cadre où respect,
+        avec la même attention et la même bienveillance, dans un cadre où respect,
         sécurité et bien-être resteront les valeurs fondatrices de Moana Ora.`,
       p2: `Nous remercions chaleureusement toutes celles et ceux qui, depuis plus de 30 ans,
         ont participé à nos programmes interactifs et éducatifs, contribuant à cette
@@ -60,8 +60,7 @@
       p2: `We warmly thank all of those who, for over 30 years, took part in our interactive and
         educational programs, contributing to this wonderful human–animal adventure.
         This new step marks the beginning of a new chapter in the relationship between humans and the marine world.`,
-      p3: `Moana Ora looks forward to welcoming you in <span class="highlight">March 2026</span>.<br/>
-        You will discover a place of connection, education, and exploration of the marine world, where history, nature, science, and culture will blend harmoniously.`,
+      p3: `Moana Ora look forward to welcoming you in <span class="highlight">March 2026</span>.<br/> You will discover a place of connection, education, and exploration of the marine world, where history, nature, science, and culture will blend harmoniously.`,
       signature: `The Moorea Dolphin Center team`,
       cta: `Discover Moana Ora`,
       aria: `Version française`,
@@ -118,57 +117,25 @@
     toggleBtn.title = t.aria;
 
     setToggleIconFor(l);
-
-    // recalcul juste après changement de langue
-    setTimeout(fitLetter, 0);
   }
 
   // --- Insertion du bouton dans la carte ---
   if (letter) letter.appendChild(toggleBtn);
 
-  // --- Ajuste la carte pour que tout rentre en desktop ---
+  // --- Ajuste la carte pour garder les mêmes proportions (desktop) ---
   function fitLetter() {
     if (!letter) return;
 
-    // reset compactage
+    // on enlève d'abord tout resserrement
     letter.classList.remove("fit-tight");
-    letter.style.removeProperty("--prose-scale");
 
-    // même seuil que le CSS (72rem ≈ 1152px)
+    // on n'ajuste que sur desktop (même palier que l'inclinaison)
     const isDesktop = window.matchMedia("(min-width: 72rem)").matches;
 
-    // petite marge de sécurité pour ne pas être "à ras"
-    const BOTTOM_SAFE = 6; // px
-
+    // attendre que le DOM applique les nouvelles traductions
     requestAnimationFrame(() => {
-      if (!isDesktop) return;
-
-      // si ça rentre déjà avec l'échelle globale (CSS), on ne touche à rien
-      if (letter.scrollHeight <= letter.clientHeight - BOTTOM_SAFE) return;
-
-      // active le mode compact et ajuste finement l'échelle
-      letter.classList.add("fit-tight");
-
-      // point de départ = valeur CSS actuelle (fallback 0.93 si absent)
-      const cssScale =
-        parseFloat(
-          getComputedStyle(letter).getPropertyValue("--prose-scale")
-        ) || 0.93;
-
-      let scale = cssScale;
-      let tries = 0;
-
-      letter.style.setProperty("--prose-scale", scale.toFixed(2));
-
-      // rétrécit par pas très fins jusqu'à ce que TOUT tienne avec marge
-      while (
-        letter.scrollHeight > letter.clientHeight - BOTTOM_SAFE &&
-        scale > 0.9 &&
-        tries < 20
-      ) {
-        scale -= 0.01;
-        letter.style.setProperty("--prose-scale", scale.toFixed(2));
-        tries++;
+      if (isDesktop && letter.scrollHeight > letter.clientHeight) {
+        letter.classList.add("fit-tight"); // resserre légèrement
       }
     });
   }
@@ -178,21 +145,11 @@
     lang = lang === "fr" ? "en" : "fr";
     localStorage.setItem("lang", lang);
     applyLang(lang);
+    fitLetter(); // ajuste la hauteur après changement de langue
   });
 
   // --- Initialisation ---
   applyLang(lang);
-  fitLetter();
-
-  // --- Réarmement du calcul à tous les bons moments ---
-  window.addEventListener("load", fitLetter);
+  fitLetter(); // ajuste à l’ouverture
   window.addEventListener("resize", fitLetter);
-
-  // relance quand les polices sont prêtes (évite rognage GitHub Pages)
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(fitLetter);
-  }
-
-  // sécurité asynchrone supplémentaire
-  requestAnimationFrame(() => setTimeout(fitLetter, 0));
 })();
