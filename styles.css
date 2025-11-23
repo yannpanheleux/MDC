@@ -1,0 +1,417 @@
+/* === Cohérence typographique entre machines === */
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+:root {
+  /*  Palette lagon + sable + texte blanc chaud */
+  --bg-light: #b8e3e1;
+  --sand: #f6e7c1;
+  --ink: #fefcf8;
+  --ink-soft: #f2ebe0;
+  --glass: rgba(0, 28, 43, 0.35);
+  --glass-border: rgba(255, 255, 255, 0.25);
+  --shadow: rgba(0, 0, 0, 0.4);
+  --safe-gap: clamp(12px, 2.5vmin, 28px);
+
+  --max-prose: 68ch;
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: auto;
+  margin: 0;
+}
+
+body {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: var(--safe-gap);
+  overflow: auto;
+  font-family: ui-serif, Georgia, "Times New Roman", serif;
+  color: var(--ink);
+
+  background-image: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.15),
+      rgba(255, 255, 255, 0.05)
+    ),
+    url("./images/Centre_MDC.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 65%;
+  background-attachment: fixed;
+
+  perspective: 1600px;
+  background-color: var(--bg-light);
+  filter: saturate(1.15) contrast(1.05);
+}
+
+/* ======= HEADER ======= */
+.site-header {
+  position: static;
+  z-index: 10;
+  text-align: center;
+  margin-bottom: 0.8rem;
+}
+
+.logo {
+  height: clamp(72px, 10vw, 110px);
+  width: auto;
+  opacity: 0.9;
+  filter: hue-rotate(10deg) saturate(0.9) brightness(1.1);
+  transition: opacity 0.2s ease-in-out;
+  margin-inline: auto;
+}
+
+.container {
+  width: min(100% - 2 * var(--safe-gap), 1200px);
+  margin-inline: auto;
+}
+
+/* ======= “LETTER” ======= */
+.letter {
+  position: relative; /* contexte pour bouton langue */
+  width: 100%;
+  max-width: var(--max-prose);
+  margin-inline: auto;
+  min-height: auto;
+  height: auto;
+  max-height: none;
+
+  padding-block-start: clamp(1.2rem, 2.2vmin + 0.5rem, 2.2rem);
+  padding-block-end: clamp(1.2rem, 2.2vmin + 0.5rem, 2.2rem);
+  padding-inline: clamp(1rem, 2.4vmin + 0.6rem, 2rem);
+
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.5rem;
+
+  transform: none;
+
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 6px 16px var(--shadow), 0 1px 0 rgba(255, 255, 255, 0.55) inset;
+  -webkit-backdrop-filter: blur(12px) saturate(1.05);
+  backdrop-filter: blur(12px) saturate(1.05);
+}
+
+.letter::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: radial-gradient(
+    60% 40% at 18% 10%,
+    rgba(255, 255, 255, 0.18),
+    transparent 60%
+  );
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+p {
+  font-size: clamp(1rem, 1.2vw + 0.6rem, 1.2rem);
+  line-height: 1.66;
+  color: var(--ink-soft);
+  margin: 0 0 0.75rem 0;
+  text-wrap: pretty;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.signature {
+  margin-top: 0.3rem;
+  text-align: right;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+a.button {
+  align-self: stretch;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  padding: 0.9rem 1.2rem;
+  border-radius: 999px;
+  margin-top: 0.6rem;
+  background: linear-gradient(180deg, #ffd97f, #f5c45e);
+  color: #3b2500;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  white-space: nowrap;
+}
+a.button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+}
+
+.highlight {
+  color: #ffe6ad;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.45), 0 0 6px rgba(255, 210, 120, 0.55);
+}
+
+.intro {
+  font-size: 1.1em;
+  color: var(--ink);
+}
+
+/* ====== Bouton de langue ====== */
+.lang-toggle {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  z-index: 10;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass);
+  box-shadow: 0 6px 14px var(--shadow), 0 1px 0 rgba(255, 255, 255, 0.45) inset;
+  -webkit-backdrop-filter: blur(10px) saturate(1.05);
+  backdrop-filter: blur(10px) saturate(1.05);
+  display: grid;
+  place-items: center;
+  font-size: 0;
+  line-height: 0;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s ease;
+  opacity: 0.95;
+}
+.lang-toggle:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+}
+.lang-toggle svg {
+  display: block;
+  width: 22px;
+  height: 22px;
+  border-radius: 3px;
+}
+
+/* ===== PATCH iOS ===== */
+.lang-toggle {
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  contain: paint;
+}
+.lang-toggle:focus {
+  outline: none;
+}
+@supports (-webkit-touch-callout: none) {
+  .lang-toggle {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+/* ====== Orientation hints ====== */
+@media (orientation: portrait) {
+  body {
+    background-position: 50% 60%;
+  }
+}
+@media (orientation: landscape) {
+  body {
+    background-position: 50% 70%;
+  }
+}
+
+/* ========= PALIER 1 — ≥ 48rem ========= */
+@media (min-width: 48rem) {
+  .container {
+    display: grid;
+    grid-template-columns: 1fr minmax(0, var(--max-prose)) 1fr;
+    gap: var(--space-3);
+  }
+  .letter {
+    grid-column: 2;
+  }
+  a.button {
+    align-self: flex-start;
+    width: auto;
+  }
+}
+
+/* ========= PALIER 2 — ≥ 72rem ========= */
+@media (min-width: 72rem) {
+  body {
+    overflow: hidden;
+    background-attachment: fixed;
+    justify-content: flex-end;
+  }
+
+  .site-header {
+    position: absolute;
+    top: calc(var(--safe-gap) * 2.5);
+    left: calc(var(--safe-gap) * 2.5);
+    text-align: left;
+    margin: 0;
+  }
+
+  .logo {
+    height: 150px;
+    opacity: 0.85;
+    margin: 0;
+  }
+
+  .container {
+    display: block;
+    width: 100%;
+  }
+
+  .letter {
+    max-width: min(720px, calc(100vw - 2 * var(--safe-gap)));
+    width: clamp(320px, 42vw, 720px);
+    min-height: clamp(640px, 90dvh, 960px);
+    max-height: calc(100dvh - 2 * var(--safe-gap));
+    margin-left: auto;
+    margin-right: 2%;
+
+    transform: rotateY(-10deg) rotateX(2deg) translateZ(32px);
+    transform-origin: center right;
+    transform-style: preserve-3d;
+
+    box-shadow: -14px 18px 36px var(--shadow),
+      0 1px 0 rgba(255, 255, 255, 0.55) inset;
+  }
+
+  .lang-toggle {
+    top: 0.8rem;
+    right: 0.8rem;
+  }
+}
+
+/* Interactions tactiles */
+@media (hover: none) and (pointer: coarse) {
+  a.button:hover {
+    transform: none;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+  }
+  .lang-toggle:hover {
+    transform: none;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+  }
+}
+
+/* === PATCHs d’inclinaison desktop === */
+@media (min-width: 72rem) {
+  body {
+    perspective: 1600px !important;
+    perspective-origin: right center;
+    transform-style: preserve-3d;
+  }
+  .letter {
+    transform: perspective(1600px) rotateY(-10deg) rotateX(2deg)
+      translateZ(32px) !important;
+    transform-origin: center right;
+    backface-visibility: hidden;
+    will-change: transform;
+  }
+}
+@media (min-width: 1024px) and (max-width: 71.999rem) {
+  .letter {
+    transform: rotateY(-10deg) rotateX(2deg) translateZ(32px) !important;
+    transform-origin: center right !important;
+  }
+}
+
+/* === Ajustement auto si le texte est plus long === */
+.letter {
+  --prose-scale: 1;
+}
+@media (min-width: 72rem) {
+  .letter p {
+    font-size: calc(clamp(1rem, 1.2vw + 0.6rem, 1.2rem) * var(--prose-scale));
+    line-height: calc(1.66 * var(--prose-scale));
+  }
+  .letter .intro {
+    font-size: calc(1.1em * var(--prose-scale));
+  }
+  .letter a.button {
+    padding: calc(0.9rem * var(--prose-scale)) calc(1.2rem * var(--prose-scale));
+  }
+}
+
+/* === FIX FINAL — desktop : aucun débordement de .letter === */
+@media (min-width: 72rem) {
+  html,
+  body {
+    height: 100dvh;
+  }
+  body {
+    overflow: hidden;
+  }
+
+  .letter {
+    max-height: calc(100dvh - 2 * var(--safe-gap));
+    overflow-y: auto; /* scroll interne si besoin */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+    padding-bottom: clamp(1rem, 2.5vmin, 2rem);
+  }
+
+  /* Effet 3D assuré même avec overflow interne */
+  .container .letter {
+    transform: perspective(1600px) rotateY(-10deg) rotateX(2deg)
+      translateZ(32px) !important;
+    transform-origin: center right !important;
+  }
+}
+
+/* ===== Ajustement desktop moyen : 1201px–1400px ===== */
+@media (min-width: 1201px) and (max-width: 1400px) {
+  /* On centre la lettre dans le viewport au lieu de la coller en bas */
+  body {
+    justify-content: center;
+  }
+
+  .letter {
+    /* largeur et hauteur contrôlées pour tenir dans le 100vh */
+    max-width: 40rem;
+    width: 100%;
+    max-height: calc(100vh - 2 * var(--safe-gap));
+
+    /* pas de scroll interne dans cette plage */
+    overflow-y: hidden;
+
+    /* on gère explicitement haut / bas pour le “coussin” du bouton */
+    padding-top: 1.2rem;
+    padding-bottom: 2rem;
+  }
+
+  /* Texte un poil plus compact pour être sûr que tout rentre */
+  .letter p {
+    font-size: clamp(0.95rem, 1vw + 0.45rem, 1.05rem);
+    line-height: 1.5;
+  }
+
+  /* Bouton Moana Ora : écart au-dessus, et décollé du bord bas */
+  .letter a.button {
+    margin-top: 0.75rem;
+    align-self: flex-start;
+  }
+}
